@@ -8,7 +8,7 @@
               <v-icon>mdi-home</v-icon>
             </v-list-item-icon>
 
-            <v-list-item-title><a href="/home.html">Home</a></v-list-item-title>
+            <v-list-item-title><a href="/">Home</a></v-list-item-title>
           </v-list-item>
 
           <v-list-group :value="true" prepend-icon="mdi-account-circle">

@@ -9,7 +9,7 @@
             </v-list-item-icon>
 
             <v-list-item-title
-              ><a href="/content_list.html">Home</a></v-list-item-title
+              ><a href="/contents">Contents</a></v-list-item-title
             >
           </v-list-item>
 
@@ -81,9 +81,20 @@
     <v-footer app> &copy; Prediction </v-footer>
   </v-app>
 </template>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
 import Home from "../components/Home.vue";
+// axios
+//   .get("/")
+//   .then(function (res) {
+//     // 인자는 임의로 아무거나 넣어줘도 된다. ex) res
+//     console.log("GET RES", res);
+//   }) // .then 성공 시 callback 함수
+//   .catch(function (err) {
+//     // .catch 실패 시 callback 함수
+//     console.log("GET ERR", err);
+//   });
 export default {
   components: { Home },
   data: () => ({
