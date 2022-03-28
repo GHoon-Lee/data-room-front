@@ -3,9 +3,10 @@
     <v-data-table
       :headers="headers"
       :items="contents"
-      sort-by="name"
+      sort-by="updated_time"
       class="elevation-1"
       :items-per-page="5"
+      @click:row="getContent"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -92,29 +93,24 @@
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
-      </template>
+      <!-- <template v-slot:no-data>
+        <v-btn color="primary" @click="getContents(categoryId)"> Reset </v-btn>
+      </template> -->
     </v-data-table>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
-      {
-        text: "ID",
-        align: "start",
-        sortable: false,
-        value: "name",
-      },
-      { text: "제목", value: "calories" },
-      { text: "수정일", value: "fat" },
-      { text: "파일 이름", value: "carbs" },
-      { text: "작성자", value: "protein" },
+      { text: "제목", value: "title" },
+      { text: "파일 이름", value: "file_name" },
+      { text: "작성/수정일", value: "updated_time" },
+      { text: "작성자", value: "user_name" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     contents: [],
@@ -151,62 +147,26 @@ export default {
   },
 
   created() {
-    this.initialize();
+    const params = new URL(location).searchParams;
+    var categoryId = params.get("categoryId");
+    console.log(categoryId);
+    console.log(location);
+    this.getContents(categoryId);
   },
 
   methods: {
-    initialize() {
-      this.contents = [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-        },
-      ];
+    getContents(categoryId) {
+      axios
+        .get(`http://localhost:8000/api/contents?category=${categoryId}`)
+        .then((res) => {
+          this.contents = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getContent(item) {
+      location.href = `contents/${item.id}`;
     },
 
     editItem(item) {
@@ -253,3 +213,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-data-table >>> tbody > tr {
+  cursor: pointer;
+  font-style: italic;
+}
+</style>

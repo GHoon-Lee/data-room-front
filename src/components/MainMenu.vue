@@ -5,7 +5,7 @@
         <v-list>
           <v-list-group :value="true" prepend-icon="mdi-account-circle">
             <template v-slot:activator>
-              <v-list-item-title>Users</v-list-item-title>
+              <v-list-item-title>목록</v-list-item-title>
             </template>
 
             <v-list-group
@@ -27,6 +27,7 @@
               >
                 <v-list-item-title
                   v-text="sub_category.name"
+                  @click="getContents(sub_category.id)"
                 ></v-list-item-title>
               </v-list-item>
             </v-list-group>
@@ -66,7 +67,6 @@ export default {
     drawer: null,
     items: [
       { title: "Login" },
-      { title: "Register" },
       { title: "Logout" },
       { title: "Password Change" },
     ],
@@ -85,6 +85,9 @@ export default {
         .catch((err) => {
           console.log("GET ERR", err);
         });
+    },
+    getContents(categoryId) {
+      location.href = `/contents?category=${categoryId}`;
     },
   },
 };
