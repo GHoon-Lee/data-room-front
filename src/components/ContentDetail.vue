@@ -13,7 +13,13 @@
           <br />
           <br />
           <br />
-          <a href="#" @click="getFile">{{ content.file_name }}</a>
+          <!-- <a href="#" @click="getFile">{{ content.file_name }}</a> -->
+          <a @click="getFile" download>
+            <span style="margin-right: 10px">{{ content.file_name }}</span>
+            <!-- <v-btn @click="getFile">
+              <v-icon>download icon</v-icon>
+            </v-btn> -->
+          </a>
         </v-card>
       </v-col>
     </v-row>
@@ -22,20 +28,27 @@
 
 <script>
 import axios from "axios";
+import EventBus from "./event_bus";
 export default {
-  name: "HelloWorld",
-
   data: () => ({
     content: {},
+    userInfo: {
+      id: null,
+      division: null,
+      username: "Anonymous",
+    },
   }),
   created() {
+    EventBus.$on("userinfo_change", (val) => {
+      this.userInfo = val;
+    });
     const contentId = location.pathname.split("/")[2];
     this.getContent(contentId);
   },
   methods: {
     getContent(contentId) {
       axios
-        .get(`http://localhost:8000/api/contents/${contentId}`)
+        .get(`/api/contents/${contentId}`)
         .then((res) => {
           this.content = res.data;
         })
@@ -44,6 +57,13 @@ export default {
         });
     },
     getFile() {
+      // const ele = document.createElement("a");
+      // ele.setAttribute(
+      //   "href",
+      //   `https://prediction-datas.s3.ap-northeast-2.amazonaws.com/${this.content["file"]}`
+      // );
+      // ele.setAttribute("download", "");
+      // ele.click();
       location.href = this.content["file"];
     },
   },
