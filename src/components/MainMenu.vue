@@ -39,6 +39,21 @@
               </v-list-item>
             </v-list-group>
           </v-list-group>
+          <v-list-group v-if="postCategorys.length > 0">
+            <template v-slot:activator>
+              <v-list-item-title>Prediction Post</v-list-item-title>
+            </template>
+            <v-list-item
+              v-for="(post_category, i) in postCategorys"
+              :key="i"
+              link
+            >
+              <v-list-item-title
+                v-text="post_category.name"
+                @click="getPosts(post_category.id)"
+              ></v-list-item-title>
+            </v-list-item>
+          </v-list-group>
         </v-list>
       </v-card>
     </v-navigation-drawer>
@@ -94,15 +109,20 @@
               prepend-icon="mdi-lock"
               type="password"
             ></v-text-field>
+            <v-spacer></v-spacer>
+            <v-btn text color="grey" @click="cancel('login')">취소</v-btn>
+            <v-btn
+              type="submit"
+              color="primary"
+              class="mr-5"
+              @click="save('login', $event)"
+              >로그인</v-btn
+            >
           </v-form>
         </v-card-text>
-        <v-card-actions>
+        <!-- <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="grey" @click="cancel('login')">취소</v-btn>
-          <v-btn color="primary" class="mr-5" @click="save('login')"
-            >로그인</v-btn
-          >
-        </v-card-actions>
+        </v-card-actions> -->
       </v-card>
     </v-dialog>
     <!-- pwdchg dialog -->
@@ -136,7 +156,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text color="grey" @click="cancel('pwdchg')">취소</v-btn>
-          <v-btn color="warning" class="mr-5" @click="save('pwdchg')"
+          <v-btn color="warning" class="mr-5" @click="save('pwdchg', $event)"
             >확인</v-btn
           >
         </v-card-actions>
@@ -156,6 +176,7 @@ export default {
   data: () => ({
     drawer: null,
     categorys: [],
+    postCategorys: [],
     dialog: {
       login: false,
       pwdchg: false,
@@ -167,7 +188,7 @@ export default {
     },
   }),
   watch: {
-    me(newVal, oldVal) {
+    userInfo(newVal, oldVal) {
       console.log("watch.me()...", newVal, oldVal);
       EventBus.$emit("userinfo_change", newVal);
     },
@@ -175,6 +196,7 @@ export default {
   created() {
     this.getUserInfo();
     this.getCategorys();
+    this.getPostCategorys();
   },
   methods: {
     getCategorys() {
@@ -187,8 +209,21 @@ export default {
           console.log("GET ERR", err);
         });
     },
+    getPostCategorys() {
+      axios
+        .get("/api/categorys/posts")
+        .then((res) => {
+          this.postCategorys = res.data;
+        })
+        .catch((err) => {
+          console.log("GET ERR", err);
+        });
+    },
     getContents(categoryId) {
       location.href = `/contents?categoryId=${categoryId}`;
+    },
+    getPosts(categoryId) {
+      location.href = `/posts?categoryId=${categoryId}`;
     },
     cancel(kind) {
       console.log("cancel()...", kind);
@@ -209,7 +244,8 @@ export default {
       }
     },
 
-    save(kind) {
+    save(kind, e) {
+      e.preventDefault();
       console.log("save()...", kind);
       if (kind === "login") {
         this.login();
@@ -231,6 +267,7 @@ export default {
           // alert(`user ${res.data.username} login OK`);
           this.userInfo = res.data;
           this.getCategorys();
+          this.getPostCategorys();
         })
         .catch((err) => {
           console.log("LOGIN POST ERR.RESPONSE", err.response);

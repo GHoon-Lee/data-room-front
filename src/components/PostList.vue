@@ -2,11 +2,11 @@
   <v-container>
     <v-data-table
       :headers="headers"
-      :items="contents"
+      :items="posts"
       sort-by="updated_time"
       class="elevation-1"
       :items-per-page="5"
-      @click:row="getContent"
+      @click:row="getPost"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -16,7 +16,7 @@
         </v-toolbar>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="getContents">Reset</v-btn>
+        <v-btn color="primary" @click="getPosts">Reset</v-btn>
       </template>
     </v-data-table>
   </v-container>
@@ -32,12 +32,12 @@ export default {
     dialogDelete: false,
     headers: [
       { text: "제목", value: "title" },
-      { text: "파일 이름", value: "file_name" },
+      { text: "요약", value: "description" },
       { text: "작성/수정일", value: "updated_time" },
-      { text: "작성자", value: "user_name" },
+      { text: "조회수", value: "views" },
     ],
     categoryName: "",
-    contents: [],
+    posts: [],
     userInfo: {
       id: null,
       division: null,
@@ -51,23 +51,23 @@ export default {
     EventBus.$on("userinfo_change", (val) => {
       this.userInfo = val;
     });
-    this.getContents(categoryId);
+    this.getPosts(categoryId);
   },
 
   methods: {
-    getContents(categoryId) {
+    getPosts(categoryId) {
       axios
-        .get(`/api/contents?category=${categoryId}`)
+        .get(`/api/posts?category=${categoryId}`)
         .then((res) => {
-          this.contents = res.data["contents"];
+          this.posts = res.data["posts"];
           this.categoryName = res.data["category_name"];
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    getContent(item) {
-      location.href = `/contents/${item.id}`;
+    getPost(item) {
+      location.href = `/posts/${item.id}`;
     },
   },
 };

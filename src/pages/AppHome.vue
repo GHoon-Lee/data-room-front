@@ -1,18 +1,21 @@
 <template>
   <v-app id="inspire">
-    <MainMenu />
-    <v-main>
-      <div style="">
-        <UserChart />
-      </div>
-      <div style="">
-        <LogChart />
-      </div>
-    </v-main>
-    <!-- <v-main v-else>
-      <h1>로그인을 해주세요</h1>
-    </v-main> -->
-    <MainFooter />
+    <div>
+      <MainMenu />
+      <v-main v-if="!isLoaded"> 로딩중{{ isLoaded ? 1 : 2 }} </v-main>
+      <v-main v-else-if="userInfo.username === 'Anonymous'">
+        <h1>로그인을 해주세요</h1>
+      </v-main>
+      <v-main v-else>
+        <div style="">
+          <UserChart />
+        </div>
+        <div style="">
+          <LogChart />
+        </div>
+      </v-main>
+      <MainFooter />
+    </div>
   </v-app>
 </template>
 
@@ -31,11 +34,14 @@ export default {
       division: null,
       username: "Anonymous",
     },
+    isLoaded: false,
   }),
-  created() {
+  mounted() {
     console.log("123");
     EventBus.$on("userinfo_change", (val) => {
+      console.log("heelo");
       this.userInfo = val;
+      this.isLoaded = true;
     });
     console.log(this.userInfo);
   },

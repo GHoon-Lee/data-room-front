@@ -40,6 +40,7 @@ export default {
   }),
   created() {
     EventBus.$on("userinfo_change", (val) => {
+      console.log("wrberguirgeiu");
       this.userInfo = val;
     });
     const contentId = location.pathname.split("/")[2];
