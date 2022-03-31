@@ -6,7 +6,6 @@
       sort-by="updated_time"
       class="elevation-1"
       :items-per-page="5"
-      @click:row="getContent"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -14,6 +13,11 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
         </v-toolbar>
+      </template>
+      <template v-slot:[`item.action`]="{ item }">
+        <v-icon small class="mr-2 pa-4" @click="getFile(item)"
+          >mdi-arrow-collapse-down</v-icon
+        >
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="getContents">Reset</v-btn>
@@ -35,6 +39,7 @@ export default {
       { text: "파일 이름", value: "file_name" },
       { text: "작성/수정일", value: "updated_time" },
       { text: "작성자", value: "user_name" },
+      { text: "Download", value: "action", sortable: false, align: "center" },
     ],
     categoryName: "",
     contents: [],
@@ -66,15 +71,16 @@ export default {
           console.log(err);
         });
     },
-    getContent(item) {
-      location.href = `/contents/${item.id}`;
+    getFile(item) {
+      location.href = item.file_url;
+      // console.log(item.file_url);
     },
   },
 };
 </script>
 
 <style scoped>
-.v-data-table >>> tbody > tr {
+.v-data-table >>> tbody > tr > td > button {
   cursor: pointer;
   font-style: italic;
 }

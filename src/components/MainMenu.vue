@@ -263,7 +263,6 @@ export default {
       axios
         .post("/api/login", postData)
         .then((res) => {
-          console.log("LOGIN POST RES", res);
           // alert(`user ${res.data.username} login OK`);
           this.userInfo = res.data;
           this.getCategorys();

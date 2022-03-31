@@ -13,6 +13,9 @@
           <v-toolbar-title> {{ categoryName }} </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
+          <v-btn v-if="userInfo.division.id === 1" @click="getPostForm"
+            >New Post</v-btn
+          >
         </v-toolbar>
       </template>
       <template v-slot:no-data>
@@ -34,7 +37,6 @@ export default {
       { text: "제목", value: "title" },
       { text: "요약", value: "description" },
       { text: "작성/수정일", value: "updated_time" },
-      { text: "조회수", value: "views" },
     ],
     categoryName: "",
     posts: [],
@@ -48,8 +50,12 @@ export default {
   created() {
     const params = new URL(location).searchParams;
     var categoryId = params.get("categoryId");
+    this.categoryId = categoryId;
     EventBus.$on("userinfo_change", (val) => {
       this.userInfo = val;
+      if (this.userInfo.division.id === 1) {
+        this.headers.push({ text: "조회수", value: "views" });
+      }
     });
     this.getPosts(categoryId);
   },
@@ -68,6 +74,9 @@ export default {
     },
     getPost(item) {
       location.href = `/posts/${item.id}`;
+    },
+    getPostForm() {
+      location.href = `/form/post?type=new&category=${this.categoryId}`;
     },
   },
 };

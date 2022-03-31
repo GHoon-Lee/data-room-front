@@ -18,16 +18,16 @@ module.exports = defineConfig({
       filename: "content_list.html",
       minify: false,
     },
-    content_detail: {
-      template: "public/index.html",
-      entry: "src/pages/content_detail.js",
-      filename: "content_detail.html",
-      minify: false,
-    },
     post_detail: {
       template: "public/index.html",
       entry: "src/pages/post_detail.js",
       filename: "post_detail.html",
+      minify: false,
+    },
+    post_form: {
+      template: "public/index.html",
+      entry: "src/pages/post_form.js",
+      filename: "post_form.html",
       minify: false,
     },
     post_list: {

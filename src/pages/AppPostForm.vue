@@ -2,18 +2,18 @@
   <v-app id="inspire">
     <MainMenu />
     <v-main>
-      <ContentDetail />
+      <PostForm />
     </v-main>
     <MainFooter />
   </v-app>
 </template>
 
 <script>
-import ContentDetail from "../components/ContentDetail.vue";
+import PostForm from "../components/PostForm.vue";
 import MainMenu from "../components/MainMenu.vue";
 import MainFooter from "../components/MainFooter.vue";
 export default {
-  components: { ContentDetail, MainMenu, MainFooter },
+  components: { PostForm, MainMenu, MainFooter },
   data: () => ({}),
 };
 </script>
