@@ -80,7 +80,7 @@ export default defineComponent({
           var labell = [];
           var dataa = [];
           for (let i in res.data) {
-            labell.push(res.data[i]["user_login_time"]);
+            labell.push(res.data[i]["date"]);
             dataa.push(res.data[i]["count"]);
           }
           data.value = dataa;
