@@ -8,6 +8,9 @@
       </v-main>
       <v-main v-else>
         <div style="">
+          <MainTable />
+        </div>
+        <div style="">
           <UserChart />
         </div>
         <div style="">
@@ -23,11 +26,12 @@
 import UserChart from "../components/UserChart.vue";
 import LogChart from "../components/LogChart.vue";
 import MainMenu from "../components/MainMenu.vue";
+import MainTable from "../components/MainTable.vue";
 import MainFooter from "../components/MainFooter.vue";
 import EventBus from "../components/event_bus";
 
 export default {
-  components: { UserChart, MainMenu, MainFooter, LogChart },
+  components: { UserChart, MainMenu, MainFooter, LogChart, MainTable },
   data: () => ({
     userInfo: {
       id: null,
