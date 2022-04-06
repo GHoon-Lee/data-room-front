@@ -16,7 +16,7 @@
       <v-col cols="4" sm="4" lg="3" align="center" justify="center">
         <div style="font-size: 20px">일평균 문제풀이 갯수</div>
         <div style="font-size: 40px; font-weight: bold">
-          {{ tableData.solve_count_for_day }} 만
+          {{ tableData.solve_count_for_day }} 개
         </div>
       </v-col>
     </v-row>
@@ -33,12 +33,18 @@ export default {
       division: null,
       username: "Anonymous",
     },
-    tableData: null,
+    tableData: {
+      download_count: 0,
+      solve_count_for_user: 0,
+      solve_count_for_day: 0,
+    },
   }),
   created() {
     EventBus.$on("userinfo_change", (val) => {
       this.userInfo = val;
     });
+    this.getDataTable();
+    console.log(this.tableData);
   },
   methods: {
     getDataTable() {
